@@ -9,6 +9,7 @@ High-level overview of the CHEKO restaurant management system frontend.
 - **TypeScript**
 - **Tailwind CSS**
 - **Mapbox JS**
+- Axios
 
 ## Key Features
 

@@ -48,6 +48,10 @@ High-level overview of the CHEKO restaurant management system frontend.
 - Custom map styling for brand consistency
 - Address autocomplete and validation
 
+### 6. Dark Mode
+
+- Customizable dark mode for night-time use
+
 ## User Interfaces
 
 - Home Page which displays restaurant listings

@@ -4,7 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="63243713-dbb3-4d03-bb26-3f62912fb290" name="Changes" comment="" />
+    <list default="true" id="63243713-dbb3-4d03-bb26-3f62912fb290" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faisal/cheko/controller/MenuSectionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faisal/cheko/controller/MenuSectionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faisal/cheko/repository/MenuSectionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faisal/cheko/repository/MenuSectionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faisal/cheko/service/MenuSectionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faisal/cheko/service/MenuSectionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/faisal/cheko/service/impl/MenuSectionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/faisal/cheko/service/impl/MenuSectionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faisal/cheko/controller/MenuSectionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faisal/cheko/controller/MenuSectionController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faisal/cheko/repository/MenuSectionRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faisal/cheko/repository/MenuSectionRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faisal/cheko/service/MenuSectionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faisal/cheko/service/MenuSectionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faisal/cheko/service/impl/MenuItemServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faisal/cheko/service/impl/MenuItemServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/faisal/cheko/service/impl/MenuSectionServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/faisal/cheko/service/impl/MenuSectionServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -80,7 +92,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1761031710011</updated>
-      <workItem from="1761031711085" duration="14437000" />
+      <workItem from="1761031711085" duration="17625000" />
     </task>
     <servers />
   </component>

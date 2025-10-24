@@ -32,7 +32,7 @@
   --info: #3b82f6;
   
   /* Text colors */
-  --text-primary: #fff;
+  --text-primary: #374151;
   --text-secondary: #4b5563;
   --text-muted: #9ca3af;
   
@@ -75,26 +75,25 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Dark mode theme variables */
 .dark {
   /* Base colors */
-  --background: #0a0a0a;
+  --background: #374151; /* nearly black but not pure */
   --foreground: #ededed;
-  --tranparent: tranparent;
+  --tranparent: transparent;
 
   /* UI Elements */
-  --card-bg: #1f2937;
-  --card-border: #374151;
-  --card-shadow: rgba(0, 0, 0, 0.3);
+  --card-bg: #1a1a1d; /* soft dark gray for cards */
+  --card-border: #2a2a2e;
+  --card-shadow: rgba(0, 0, 0, 0.6);
   
   /* Interactive elements */
-  --primary: #ff6b00;
-  --primary-hover: #ff8c33;
+  --primary: #ff6b00; /* keep your warm orange for consistency */
+  --primary-hover: #ff8533;
   --primary-foreground: #ffffff;
   
   /* Secondary colors */
-  --secondary: #374151;
-  --secondary-hover: #4b5563;
+  --secondary: #26262a;
+  --secondary-hover: #333338;
   --secondary-foreground: #f9fafb;
   
   /* Accent colors */
@@ -103,46 +102,48 @@
   
   /* Status colors */
   --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
+  --warning: #fbbf24;
+  --error: #f87171;
   --info: #3b82f6;
   
   /* Text colors */
   --text-primary: #f9fafb;
-  --text-secondary: #e5e7eb;
+  --text-secondary: #d1d5db;
   --text-muted: #9ca3af;
   
   /* Button colors */
-  --button-bg: #374151;
+  --button-bg: #2d2d30;
+  --button-hover: #3a3a3d;
   --button-text: #f9fafb;
-  --button-border: #4b5563;
+  --button-border: #3f3f46;
   
   /* Input colors */
-  --input-bg: #1f2937;
-  --input-border: #4b5563;
+  --input-bg: #1f1f22;
+  --input-border: #3a3a3d;
   --input-text: #f9fafb;
   --input-placeholder: #9ca3af;
   
   /* Menu item colors */
-  --menu-item-bg: #1f2937;
-  --menu-item-hover: #374151;
-  --menu-item-active: #4b5563;
+  --menu-item-bg: #1f1f22;
+  --menu-item-hover: #2d2d30;
+  --menu-item-active: #3a3a3d;
   --menu-item-text: #f9fafb;
   
   /* Badge colors */
-  --badge-bg: #374151;
+  --badge-bg: #2d2d30;
   --badge-text: #f9fafb;
   
   /* Food ordering specific */
-  --category-bg: #1f2937;
+  --category-bg: #1f1f22;
   --category-active-bg: #ff6b00;
   --category-text: #f9fafb;
   --category-active-text: #ffffff;
-  --price-color: #ff6b00;
+  --price-color: #ffb86b; /* softer orange for dark mode */
   --calorie-color: #9ca3af;
-  --search-bg: #1f2937;
+  --search-bg: #1a1a1d;
   --search-icon: #9ca3af;
 }
+
 
 body {
   background: var(--background);
@@ -456,4 +457,55 @@ input:focus-visible {
 .filter-btn{
    color: var(--button-text);
   background: var(--background);
+}
+
+/* Category menu button styling */
+.category-menu-button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 2px var(--card-shadow);
+  transition: box-shadow 0.2s;
+  white-space: nowrap;
+}
+
+.category-menu-button:hover {
+  box-shadow: 0 4px 6px var(--card-shadow);
+}
+
+.category-menu-button-icon-container {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+}
+
+.category-menu-button-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--text-primary);
+}
+
+.category-menu-button-text {
+  font-size: 1rem;
+}
+
+.category-menu-button-text-selected {
+  font-weight: 700;
+}
+
+.category-menu-button-text-normal {
+  font-weight: 500;
+}
+
+.category-menu-button-count {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
 }

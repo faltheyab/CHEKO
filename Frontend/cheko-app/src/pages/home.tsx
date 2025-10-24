@@ -53,6 +53,34 @@ const HomePage: React.FC = () => {
       </section>
       
       {/* Section 3: Menu Items */}
+       <div className="flex items-center justify-between bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl p-4 shadow-sm hover:shadow-md transition-all">
+      {/* Left: Image */}
+      <img
+        src="https://images.unsplash.com/photo-1604909053002-e9ad26553097?auto=format&fit=crop&w=400&q=80"
+        alt="Breakfast Gold"
+        className="w-28 h-28 object-cover rounded-lg"
+      />
+
+      {/* Middle: Info */}
+      <div className="flex-1 px-4">
+        <h3 className="text-[var(--text-primary)] font-semibold text-lg">
+          Breakfast Gold
+        </h3>
+        <p className="text-[var(--text-secondary)] text-sm mt-1">200 Cal</p>
+        <p className="text-[#e4b6cc] font-semibold text-lg mt-2">80 SR</p>
+      </div>
+
+      {/* Right: Quantity Controls */}
+      <div className="flex items-center gap-2">
+        <button className="w-8 h-8 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition">
+          −
+        </button>
+        <span className="w-4 text-center text-[var(--text-primary)]">0</span>
+        <button className="w-8 h-8 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition">
+          +
+        </button>
+      </div>
+    </div>
       <section>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{getCategoryName()}</h2>

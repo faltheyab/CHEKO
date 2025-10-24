@@ -23,10 +23,18 @@ interface ThemeProviderProps {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 const getInitialTheme = (): Theme => {
-  if (typeof window === 'undefined') return 'light';
+
+  if (typeof window === 'undefined') 
+    return 'light';
+
   const storedTheme = localStorage.getItem('theme') as Theme | null;
-  if (storedTheme === 'dark' || storedTheme === 'light') return storedTheme;
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+
+  if (storedTheme === 'dark' || storedTheme === 'light') 
+    return storedTheme;
+
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) 
+    return 'dark';
+
   return 'light';
 };
 
@@ -37,7 +45,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     if (typeof window === 'undefined') return;
 
     document.documentElement.style.transition =
-      'background-color 1s, color 0.3s';
+      'background-color 3s, color 1s';
 
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');

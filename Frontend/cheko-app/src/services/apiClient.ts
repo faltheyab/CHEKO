@@ -48,9 +48,9 @@ export async function initializeApiClient(): Promise<AxiosInstance> {
 }
 
 
-export function getApiClient(): AxiosInstance {
+export async function getApiClient(): Promise<AxiosInstance> {
   if (!apiClient) {
-    throw new Error('API client not initialized. Call initializeApiClient() first.');
+    return await initializeApiClient();
   }
   return apiClient;
 }

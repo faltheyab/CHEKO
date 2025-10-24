@@ -40,7 +40,14 @@ export const menuSectionService = {
   },
     
   // Get menu sections with item counts
-  getMenuSectionsWithCounts: () => httpClient.get<MenuSectionWithItemCount[]>('/menu-sections/with-counts'),
+  getMenuSectionsWithCounts: async () => {
+    try {
+      return await httpClient.get<MenuSectionWithItemCount[]>('/menu-sections/with-counts');
+    } catch (error) {
+      logger.error('Failed to fetch menu sections with counts:', error);
+      return []; // Return empty array on error
+    }
+  },
 };
 
 export default menuSectionService;

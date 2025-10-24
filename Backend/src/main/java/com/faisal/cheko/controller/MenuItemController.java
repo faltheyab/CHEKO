@@ -320,7 +320,8 @@ public class MenuItemController {
     }
 
     @GetMapping("/branch/{branchId}/available/paginated")
-    @Operation(summary = "Get available menu items by branch ID with pagination", description = "Returns a paginated list of available menu items for a specific branch")
+    @Operation(summary = "Get available menu items by branch ID with pagination and search",
+               description = "Returns a paginated list of available menu items for a specific branch, optionally filtered by name")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved menu items",
                     content = @Content(mediaType = "application/json",
@@ -330,6 +331,8 @@ public class MenuItemController {
     public ResponseEntity<PageResponse<MenuItemResponse>> getAvailableMenuItemsByBranchIdPaginated(
             @Parameter(description = "Branch ID", required = true)
             @PathVariable Long branchId,
+            @Parameter(description = "Search by menu item name", required = false)
+            @RequestParam(required = false) String search,
             @Parameter(description = "Page number (0-based)", example = "0")
             @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Page size", example = "10")
@@ -342,7 +345,7 @@ public class MenuItemController {
         Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort));
         
-        Page<MenuItemResponse> menuItemsPage = menuItemService.getAvailableMenuItemsByBranchIdPaginated(branchId, pageable);
+        Page<MenuItemResponse> menuItemsPage = menuItemService.getAvailableMenuItemsByBranchIdPaginated(branchId, search, pageable);
         PageResponse<MenuItemResponse> response = PageResponse.from(menuItemsPage);
         
         return ResponseEntity.ok(response);

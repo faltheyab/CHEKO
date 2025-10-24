@@ -1,6 +1,17 @@
-import { AxiosRequestConfig } from 'axios';
-import { getApiClient as getAxiosClient } from './apiClient';
+import { AxiosRequestConfig, AxiosInstance } from 'axios';
+import { initializeApiClient } from './apiClient';
 import { logger } from '@/src/utils/logger';
+
+// Store the API client instance
+let apiClient: AxiosInstance | null = null;
+
+// Get or initialize the API client
+async function getApiClient(): Promise<AxiosInstance> {
+  if (!apiClient) {
+    apiClient = await initializeApiClient();
+  }
+  return apiClient;
+}
 
 
 type LoadingManager = {
@@ -27,16 +38,12 @@ export const initializeLoading = (startLoading: () => void, stopLoading: () => v
 
 // Create and export the httpClient with all functionality
 export const httpClient = {
-  // Export getApiClient directly
-  getApiClient: getAxiosClient,
-  
   // HTTP methods with loading by default and logging
   get: async <T>(
     url: string, 
     config?: AxiosRequestConfig, 
     disableLoading: boolean = false
   ): Promise<T> => {
-    const client = getAxiosClient();
     logger.info(`GET request to ${url}`);
     
     try {
@@ -44,6 +51,7 @@ export const httpClient = {
         loadingManager.startLoading();
       }
       
+      const client = await getApiClient();
       const response = await client.get<T>(url, config);
       logger.debug(`GET response from ${url}`, response.data as unknown);
       return response.data;
@@ -63,7 +71,6 @@ export const httpClient = {
     config?: AxiosRequestConfig, 
     disableLoading: boolean = false
   ): Promise<T> => {
-    const client = getAxiosClient();
     logger.info(`POST request to ${url}`, data as unknown);
     
     try {
@@ -71,6 +78,7 @@ export const httpClient = {
         loadingManager.startLoading();
       }
       
+      const client = await getApiClient();
       const response = await client.post<T>(url, data, config);
       logger.debug(`POST response from ${url}`, response.data as unknown);
       return response.data;
@@ -90,7 +98,6 @@ export const httpClient = {
     config?: AxiosRequestConfig, 
     disableLoading: boolean = false
   ): Promise<T> => {
-    const client = getAxiosClient();
     logger.info(`PUT request to ${url}`, data as unknown);
     
     try {
@@ -98,6 +105,7 @@ export const httpClient = {
         loadingManager.startLoading();
       }
       
+      const client = await getApiClient();
       const response = await client.put<T>(url, data, config);
       logger.debug(`PUT response from ${url}`, response.data as unknown);
       return response.data;
@@ -116,7 +124,6 @@ export const httpClient = {
     config?: AxiosRequestConfig, 
     disableLoading: boolean = false
   ): Promise<T> => {
-    const client = getAxiosClient();
     logger.info(`DELETE request to ${url}`);
     
     try {
@@ -124,6 +131,7 @@ export const httpClient = {
         loadingManager.startLoading();
       }
       
+      const client = await getApiClient();
       const response = await client.delete<T>(url, config);
       logger.debug(`DELETE response from ${url}`, response.data as unknown);
       return response.data;

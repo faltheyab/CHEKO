@@ -151,13 +151,20 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
     
     @Override
-    public Page<MenuItemResponse> getAvailableMenuItemsByBranchIdPaginated(Long branchId, Pageable pageable) {
+    public Page<MenuItemResponse> getAvailableMenuItemsByBranchIdPaginated(Long branchId, String nameQuery, Pageable pageable) {
         if (!branchRepository.existsById(branchId)) {
             throw ResourceNotFoundException.create("Branch", "id", branchId);
         }
         
-        return menuItemRepository.findAvailableByBranchId(branchId, pageable)
-                .map(this::mapToResponse);
+        if (nameQuery != null && !nameQuery.isEmpty()) {
+            // Search by name using LIKE %nameQuery%
+            return menuItemRepository.findAvailableByBranchIdAndNameContainingIgnoreCase(branchId, nameQuery, pageable)
+                    .map(this::mapToResponse);
+        } else {
+            // If no search query, return all available items
+            return menuItemRepository.findAvailableByBranchId(branchId, pageable)
+                    .map(this::mapToResponse);
+        }
     }
     
     @Override

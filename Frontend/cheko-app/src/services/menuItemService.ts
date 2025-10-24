@@ -19,7 +19,7 @@ export const menuItemService = {
       queryParams.append('direction', direction || 'asc');
     }
     
-    return httpClient.get<PaginatedResponse<MenuItem>>(`/menu-items/branch/1/paginated?${queryParams.toString()}`);
+    return httpClient.get<PaginatedResponse<MenuItem>>(`/menu-items/branch/1/available/paginated?${queryParams.toString()}`);
   },
   
   // Get menu item by ID
@@ -103,7 +103,7 @@ export const menuItemService = {
     httpClient.get<Record<string, MenuItem>>('/menu-items/second-highest-calorie-per-category'),
     
   // Get paginated menu items by section ID with custom query parameters
-  getPaginatedBySectionIdWithParams: (sectionId: number, page: number = 0, size: number = 10, sort: string = 'name,asc') => {
+  getPaginatedBySectionIdWithParams: async (sectionId: number, page: number = 0, size: number = 10, sort: string = 'name,asc') => {
     try {
       const queryParams = new URLSearchParams();
       queryParams.append('page', page.toString());
@@ -115,35 +115,35 @@ export const menuItemService = {
         queryParams.append('direction', direction || 'asc');
       }
       
-      return httpClient.get<PaginatedResponse<MenuItem>>(
+      return await httpClient.get<PaginatedResponse<MenuItem>>(
         `/menu-sections/${sectionId}/menu-items?${queryParams.toString()}`
       );
     } catch (error) {
       logger.error(`Failed to fetch paginated menu items for section ID ${sectionId}:`, error);
-      throw error;
+      // Return empty paginated response
+      return {
+        content: [],
+        totalPages: 1,
+        totalElements: 0,
+        size: size,
+        number: page,
+        sort: sort
+      };
     }
   },
   
-  // Get paginated menu items with search and filters
-  getPaginatedWithFilters: (
+  // Get paginated menu items with search by name
+  getPaginatedWithFilters: async (
     page: number = 0,
     size: number = 10,
     sort: string = 'name,asc',
-    searchQuery?: string,
-    minPrice?: number,
-    maxPrice?: number,
-    minCalories?: number,
-    maxCalories?: number,
-    vegetarian?: boolean,
-    vegan?: boolean,
-    glutenFree?: boolean
+    searchQuery?: string
   ) => {
     try {
       const queryParams = new URLSearchParams();
       queryParams.append('page', page.toString());
       queryParams.append('size', size.toString());
       
-
       if (sort) {
         const [sortField, direction] = sort.split(',');
         queryParams.append('sort', sortField);
@@ -152,21 +152,20 @@ export const menuItemService = {
       
       if (searchQuery) queryParams.append('search', searchQuery);
       
-      // Add filter parameters
-      if (minPrice !== undefined) queryParams.append('minPrice', minPrice.toString());
-      if (maxPrice !== undefined) queryParams.append('maxPrice', maxPrice.toString());
-      if (minCalories !== undefined) queryParams.append('minCalories', minCalories.toString());
-      if (maxCalories !== undefined) queryParams.append('maxCalories', maxCalories.toString());
-      if (vegetarian) queryParams.append('vegetarian', 'true');
-      if (vegan) queryParams.append('vegan', 'true');
-      if (glutenFree) queryParams.append('glutenFree', 'true');
-      
-      return httpClient.get<PaginatedResponse<MenuItem>>(
-        `/menu-items/branch/1/paginated?${queryParams.toString()}`
+      return await httpClient.get<PaginatedResponse<MenuItem>>(
+        `/menu-items/branch/1/available/paginated?${queryParams.toString()}`
       );
     } catch (error) {
-      logger.error('Failed to fetch filtered menu items:', error);
-      throw error;
+      logger.error('Failed to fetch menu items:', error);
+      // Return empty paginated response
+      return {
+        content: [],
+        totalPages: 1,
+        totalElements: 0,
+        size: size,
+        number: page,
+        sort: sort
+      };
     }
   }
 };

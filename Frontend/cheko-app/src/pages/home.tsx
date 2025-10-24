@@ -7,10 +7,67 @@ import { HomeProviderWithLoading, useHome } from '@/src/providers/HomeProvider';
 // UI Components
 import SearchBar from '@/src/components/ui/SearchBar';
 import CategoryMenu from '@/src/components/ui/CategoryMenu';
-import MenuItemCard from '@/src/components/ui/MenuItemCard';
 import MenuItemModal from '@/src/components/ui/MenuItemModal';
 import Loader from '@/src/components/ui/Loader';
 import TopMenuBar from '@/src/components/ui/TopMenuBar';
+
+// Custom card component with counter
+const MenuItemCardWithCounter: React.FC<{
+  item: MenuItem;
+  onItemClick: (item: MenuItem) => void;
+}> = ({ item, onItemClick }) => {
+  const [itemCount, setItemCount] = React.useState(0);
+  
+  return (
+    <div
+      className="card flex items-center bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl shadow-sm hover:shadow-lg transform transition-transform duration-200 ease-out hover:scale-[1.03] will-change-transform cursor-pointer"
+      onClick={() => onItemClick(item)}
+    >
+      {/* Left: Image */}
+      <img
+        src={item.imageUrl || "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg"}
+        alt={item.name}
+        className="w-28 h-28 object-cover rounded-lg card-image"
+        onError={(e) => {
+          e.currentTarget.onerror = null; // prevents infinite loop if fallback fails
+          e.currentTarget.src = "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg";
+        }}
+      />
+
+      {/* Right: */}
+      <div className="flex-1 w-full block card-right-side">
+        <h3 className="text-[var(--text-primary)] font-semibold text-lg card-info">
+          {item.name}
+        </h3>
+        <p className="text-[var(--text-secondary)] text-sm mt-1">{item.calories || '0'} Cal</p>
+        <p className="text-[#e4b6cc] font-semibold text-lg mt-2">{item.price} SR</p>
+        <div className="w-full card-buttons flex items-right justify-end space-x-2" onClick={(e) => e.stopPropagation()}>
+          <button
+            className="w-6 h-6 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (itemCount > 0) {
+                setItemCount(itemCount - 1);
+              }
+            }}
+          >
+            −
+          </button>
+          <span className="w-4 text-center text-[var(--text-primary)]">{itemCount}</span>
+          <button
+            className="w-6 h-6 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition"
+            onClick={(e) => {
+              e.stopPropagation();
+              setItemCount(itemCount + 1);
+            }}
+          >
+            +
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const HomePage: React.FC = () => {
   // Get state and handlers from provider
@@ -38,7 +95,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       <TopMenuBar />
-      <div className="container px-4 py-6 pb-20 layout-padding">
+      <div className="container px-4 py-6 pb-20 layout">
       {/* Section 1: Search Bar */}
       <section className="mb-8">
         <SearchBar onSearch={handleSearch} />
@@ -71,53 +128,13 @@ const HomePage: React.FC = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-center mx-auto">
                 {menuItems?.map(item => (
-                  <div
+                  <MenuItemCardWithCounter
                     key={item.id}
-                    className="card flex items-center bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl shadow-sm hover:shadow-lg transform transition-transform duration-200 ease-out hover:scale-[1.03] will-change-transform"
-                    onClick={() => handleItemClick(item)}
-                  >
-                    {/* Left: Image */}
-                    <img
-                      src={item.imageUrl || "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg"}
-                      alt={item.name}
-                      className="w-28 h-28 object-cover rounded-lg card-image"
-                      onError={(e) => {
-                        e.currentTarget.onerror = null; // prevents infinite loop if fallback fails
-                        e.currentTarget.src = "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg";
-                      }}
-                    />
-
-                    {/* Right: */}
-                    <div className=" flex-1 w-full block card-right-side" onClick={(e) => e.stopPropagation()}>
-                       <h3 className=" text-[var(--text-primary)] font-semibold text-lg card-info">
-                        {item.name}
-                      </h3>
-                      <p className="text-[var(--text-secondary)] text-sm mt-1">{item.calories || '0'} Cal</p>
-                      <p className="text-[#e4b6cc] font-semibold text-lg mt-2">{item.price} SR</p>
-                      <div className="w-full card-buttons flex items-right justify-end  space-x-2">
-                        <button
-                          className="w-6 h-6 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                        >
-                          −
-                        </button>
-                        <span className="w-4 text-center text-[var(--text-primary)]">0</span>
-                        <button
-                          className="w-6 h-6 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleAddToCart(item, 1);
-                          }}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                    item={item}
+                    onItemClick={handleItemClick}
+                  />
                 ))}
               </div>
               

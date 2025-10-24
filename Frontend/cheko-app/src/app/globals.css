@@ -78,7 +78,7 @@
 
 .dark {
   /* Base colors */
-  --background: #374151; /* nearly black but not pure */
+  --background: #202124; /* nearly black but not pure */
   --foreground: #f4cadf;
   --tranparent: transparent;
 
@@ -96,7 +96,7 @@
   --secondary: #26262a;
   --secondary-hover: #333338;
   --secondary-foreground: #f9fafb;
-  --secondary-background: #7d899c;
+  --secondary-background: #616369;
 
   /* Accent colors */
   --accent: #38b2ac;
@@ -303,21 +303,23 @@ input:focus-visible {
 .h-px{
   background: var(--input-placeholder);
 }
-.pagination-button, .cart-btn{
+.pagination-button, .cart-btn, .primary-button{
     background: var(--foreground);
     color: var(--button-text);
     border-radius: 16px;
     transition: transform 0.25s ease, color 0.25s ease;
 }
-.pagination-button:hover, .sreach-button:hover , .cart-btn:hover{
+.pagination-button:hover, .sreach-button:hover , .cart-btn:hover, .primary-button:hover{
    transform: scale(1.03); 
   color: var(--text-primary);
 }
 .selected-opacity{
     opacity: 0.5;
 }
-.layout-padding{
+.layout{
     padding: 0px 114px;
+    max-width: 1272px;
+    margin:auto;
 }
 .menu{
   padding-left: 50px;
@@ -329,6 +331,7 @@ input:focus-visible {
   transition: all 0.3s ease-in-out;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   cursor: pointer;
+  border: 0px;
 }
 .card:hover {
   transform: scale(1.05);
@@ -344,4 +347,50 @@ p {
   width: 100%;
   text-wrap: balance;
   -webkit-text-size-adjust: 100%;
+}
+
+/* Modal animations */
+.modal-backdrop-enter {
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-backdrop-enter-active {
+  animation: fadeIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.modal-content-enter-active {
+  animation: scaleIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.modal{
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    border-radius: 30px;
+}
+.text{
+   color: var(--text-primary);
 }

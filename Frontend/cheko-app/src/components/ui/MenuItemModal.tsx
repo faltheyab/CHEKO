@@ -52,10 +52,10 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, isOpen, onClose, on
   if (!isOpen || !item) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div 
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-backdrop-enter modal-backdrop-enter-active">
+      <div
         ref={modalRef}
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+        className="modal rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto modal-content-enter modal-content-enter-active"
       >
         {/* Image */}
         <div className="relative h-64 w-full">
@@ -77,7 +77,7 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, isOpen, onClose, on
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-2 right-2 bg-white dark:bg-gray-800 rounded-full p-1 shadow-md"
+            className="absolute top-2 right-2 bg-white dark:bg-gray-800 rounded-full p-1 shadow-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             aria-label="Close modal"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,12 +89,12 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, isOpen, onClose, on
         {/* Content */}
         <div className="p-6">
           <div className="flex justify-between items-start mb-4">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{item.name}</h2>
-            <span className="text-xl font-bold text-gray-900 dark:text-white">${item.price.toFixed(2)}</span>
+            <h2 className="text-2xl font-bold">{item.name}</h2>
+            <span className="text-xl font-bold text">SR{item.price.toFixed(2)}</span>
           </div>
           
           <div className="flex items-center mb-4">
-            <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-xs font-medium px-2.5 py-0.5 rounded">
+            <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-xs font-medium px-2.5 py-0.5 rounded">
               {item.calories} calories
             </span>
             {!item.isAvailable && (
@@ -104,7 +104,7 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, isOpen, onClose, on
             )}
           </div>
           
-          <p className="text-gray-700 dark:text-gray-300 mb-6">{item.description}</p>
+          <p className="text mb-6">{item.description}</p>
           
           {/* Quantity selector and add to cart */}
           {item.isAvailable && (
@@ -112,7 +112,7 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, isOpen, onClose, on
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => quantity > 1 && setQuantity(quantity - 1)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8]"
                   aria-label="Decrease quantity"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -120,11 +120,11 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, isOpen, onClose, on
                   </svg>
                 </button>
                 
-                <span className="text-gray-800 dark:text-gray-200 text-xl w-8 text-center">{quantity}</span>
+                <span className="text text-xl w-8 text-center">{quantity}</span>
                 
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                  className="w-10 h-10 flex items-center justify-center rounded-full  bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8]"
                   aria-label="Increase quantity"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,7 +138,7 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, isOpen, onClose, on
                   onAddToCart(item, quantity);
                   onClose();
                 }}
-                className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-6 py-2 primary-button"
               >
                 Add to Cart
               </button>

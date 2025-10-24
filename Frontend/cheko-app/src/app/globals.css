@@ -349,6 +349,33 @@ p {
   -webkit-text-size-adjust: 100%;
 }
 
+@media (max-width: 768px) {
+  .hide-if-mobile {
+    display: none;
+  }
+  .layout {
+    padding: 0px 10px;
+  }
+  .menu {
+    border-radius: 0 0 60px;
+    height: 110px;
+  }
+  .brand-name {
+    position: absolute;
+    top: 25px;
+    left: 50px;
+  }
+  .sandwish-button{
+    position: absolute;
+    top: 19px;
+    left: 8px;
+  }
+  .bg-mobile-menu{
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+  }
+}
+
 /* Modal animations */
 .modal-backdrop-enter {
   opacity: 0;
@@ -393,4 +420,13 @@ p {
 }
 .text{
    color: var(--text-primary);
+}
+
+/* Mobile menu slide animation */
+.slide-in-active {
+  transform: translateX(0);
+}
+
+.slide-in-inactive {
+  transform: translateX(-100%);
 }

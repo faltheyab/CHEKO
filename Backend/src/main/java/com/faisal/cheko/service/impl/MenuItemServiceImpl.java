@@ -168,6 +168,16 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
     
     @Override
+    public Page<MenuItemResponse> getAvailableMenuItemsBySectionIdPaginated(Long sectionId, String nameQuery, Pageable pageable) {
+        if (!menuSectionRepository.existsById(sectionId)) {
+            throw ResourceNotFoundException.create("MenuSection", "id", sectionId);
+        }
+        
+        return menuItemRepository.findAvailableBySectionIdWithSearch(sectionId, nameQuery, pageable)
+                .map(this::mapToResponse);
+    }
+    
+    @Override
     public List<MenuItemResponse> getSecondHighestCalorieMealPerCategory() {
         return menuItemRepository.findSecondHighestCalorieMealPerCategory().stream()
                 .map(this::mapToResponse)

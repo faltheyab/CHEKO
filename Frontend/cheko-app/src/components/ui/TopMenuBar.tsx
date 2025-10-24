@@ -50,7 +50,7 @@ const TopMenuBarContent: React.FC = () => {
           
           {/* Navigation Links */}
           <div className="hidden md:block">
-            <div className="ml-10 flex items-center space-x-4">
+            <div className="ml-10 menu flex items-center space-x-4">
               {navItems.map((item) => (
                 <Link
                   key={item.path}

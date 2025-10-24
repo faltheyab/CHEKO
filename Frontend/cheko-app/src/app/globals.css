@@ -194,7 +194,7 @@ body {
     color: var(--foreground);
     font-size: 21px;
     position: absolute;
-    top: 75px;
+    top: 64px;
     left: 22px;
 }
 .active-top-menu{
@@ -204,7 +204,7 @@ body {
   border-radius: 0px 0px 10px 10px;
 }
 .nonactive-top-menu{
-  color: var(--text-primary);
+  color: var(--category-active-text);
   background: var(--tranparent);
   padding-top: 37px;
   border-radius: 0px 0px 10px 10px;
@@ -221,7 +221,7 @@ body {
 }
 .search-bar-container{
     border-radius: 15px 15px 15px 15px;
-    margin-top: -64px;
+    margin-top: -40px;
     box-shadow: -6px 9px 9px #00000021;
     background: var(--secondary-background);
     padding-right: 11px;
@@ -312,4 +312,36 @@ input:focus-visible {
 .pagination-button:hover, .sreach-button:hover , .cart-btn:hover{
    transform: scale(1.03); 
   color: var(--text-primary);
+}
+.selected-opacity{
+    opacity: 0.5;
+}
+.layout-padding{
+    padding: 0px 114px;
+}
+.menu{
+  padding-left: 50px;
+}
+.card{
+  width: 335px;
+  height: 130px;
+  padding: 10px 10px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.card-image{
+  margin-right: 10px;
+}
+.card-buttons{
+  margin-right: -31px;
+}
+p {
+  width: 100%;
+  text-wrap: balance;
+  -webkit-text-size-adjust: 100%;
 }

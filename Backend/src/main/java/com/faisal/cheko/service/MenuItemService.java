@@ -25,5 +25,6 @@ public interface MenuItemService {
     Page<MenuItemResponse> getMenuItemsBySectionIdPaginated(Long sectionId, Pageable pageable);
     Page<MenuItemResponse> getMenuItemsByBranchIdPaginated(Long branchId, Pageable pageable);
     Page<MenuItemResponse> getAvailableMenuItemsByBranchIdPaginated(Long branchId, String nameQuery, Pageable pageable);
+    Page<MenuItemResponse> getAvailableMenuItemsBySectionIdPaginated(Long sectionId, String nameQuery, Pageable pageable);
     List<MenuItemResponse> getSecondHighestCalorieMealPerCategory();
 }

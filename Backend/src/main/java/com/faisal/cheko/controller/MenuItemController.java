@@ -350,7 +350,38 @@ public class MenuItemController {
         
         return ResponseEntity.ok(response);
     }
-
+    
+    @GetMapping("/section/{sectionId}/available")
+    @Operation(summary = "Get available menu items by section ID with pagination and search",
+               description = "Returns a paginated list of available menu items for a specific section, optionally filtered by name")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved menu items",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = PageResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Section not found")
+    })
+    public ResponseEntity<PageResponse<MenuItemResponse>> getAvailableMenuItemsBySectionIdPaginated(
+            @Parameter(description = "Section ID", required = true)
+            @PathVariable Long sectionId,
+            @Parameter(description = "Search by menu item name", required = false)
+            @RequestParam(required = false) String search,
+            @Parameter(description = "Page number (0-based)", example = "0")
+            @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Page size", example = "10")
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Sort field", example = "name")
+            @RequestParam(defaultValue = "name") String sort,
+            @Parameter(description = "Sort direction", example = "asc")
+            @RequestParam(defaultValue = "asc") String direction) {
+        
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort));
+        
+        Page<MenuItemResponse> menuItemsPage = menuItemService.getAvailableMenuItemsBySectionIdPaginated(sectionId, search, pageable);
+        PageResponse<MenuItemResponse> response = PageResponse.from(menuItemsPage);
+        
+        return ResponseEntity.ok(response);
+    }
 
     // second highest calroie API
     @GetMapping("/second-highest-calorie")

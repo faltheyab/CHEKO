@@ -167,6 +167,52 @@ export const menuItemService = {
         sort: sort
       };
     }
+  },
+  
+  // Get paginated menu items with search by name and section ID
+  getPaginatedWithFiltersAndSection: async (
+    page: number = 0,
+    size: number = 10,
+    sort: string = 'name,asc',
+    searchQuery?: string,
+    sectionId?: number | null
+  ) => {
+    try {
+      const queryParams = new URLSearchParams();
+      queryParams.append('page', page.toString());
+      queryParams.append('size', size.toString());
+      
+      if (sort) {
+        const [sortField, direction] = sort.split(',');
+        queryParams.append('sort', sortField);
+        queryParams.append('direction', direction || 'asc');
+      }
+      
+      if (searchQuery) queryParams.append('search', searchQuery);
+      
+      // If section ID is provided, use the section-specific endpoint
+      if (sectionId) {
+        return await httpClient.get<PaginatedResponse<MenuItem>>(
+          `/menu-items/section/${sectionId}/available?${queryParams.toString()}`
+        );
+      } else {
+        // Otherwise use the branch endpoint
+        return await httpClient.get<PaginatedResponse<MenuItem>>(
+          `/menu-items/branch/1/available/paginated?${queryParams.toString()}`
+        );
+      }
+    } catch (error) {
+      logger.error('Failed to fetch menu items:', error);
+      // Return empty paginated response
+      return {
+        content: [],
+        totalPages: 1,
+        totalElements: 0,
+        size: size,
+        number: page,
+        sort: sort
+      };
+    }
   }
 };
 

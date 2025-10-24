@@ -38,7 +38,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       <TopMenuBar />
-      <div className="container mx-auto px-4 py-6 pb-20">
+      <div className="container px-4 py-6 pb-20 layout-padding">
       {/* Section 1: Search Bar */}
       <section className="mb-8">
         <SearchBar onSearch={handleSearch} />
@@ -75,46 +75,47 @@ const HomePage: React.FC = () => {
                 {menuItems?.map(item => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl p-4 shadow-sm hover:shadow-md transition-all"
+                    className="card flex items-center bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl shadow-sm hover:shadow-lg transform transition-transform duration-200 ease-out hover:scale-[1.03] will-change-transform"
                     onClick={() => handleItemClick(item)}
                   >
                     {/* Left: Image */}
                     <img
-                      src={item.imageUrl || "https://images.unsplash.com/photo-1604909053002-e9ad26553097?auto=format&fit=crop&w=400&q=80"}
+                      src={item.imageUrl || "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg"}
                       alt={item.name}
-                      className="w-28 h-28 object-cover rounded-lg"
+                      className="w-28 h-28 object-cover rounded-lg card-image"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null; // prevents infinite loop if fallback fails
+                        e.currentTarget.src = "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg";
+                      }}
                     />
 
-                    {/* Middle: Info */}
-                    <div className="flex-1 px-3">
-                      <h3 className="text-[var(--text-primary)] font-semibold text-lg">
+                    {/* Right: */}
+                    <div className=" flex-1 w-full block card-right-side" onClick={(e) => e.stopPropagation()}>
+                       <h3 className=" text-[var(--text-primary)] font-semibold text-lg card-info">
                         {item.name}
                       </h3>
                       <p className="text-[var(--text-secondary)] text-sm mt-1">{item.calories || '0'} Cal</p>
                       <p className="text-[#e4b6cc] font-semibold text-lg mt-2">{item.price} SR</p>
-                    </div>
-
-                    {/* Right: Quantity Controls */}
-                    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        className="w-8 h-8 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          // Decrease quantity logic would go here
-                        }}
-                      >
-                        −
-                      </button>
-                      <span className="w-4 text-center text-[var(--text-primary)]">0</span>
-                      <button
-                        className="w-8 h-8 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAddToCart(item, 1);
-                        }}
-                      >
-                        +
-                      </button>
+                      <div className="w-full card-buttons flex items-right justify-end  space-x-2">
+                        <button
+                          className="w-6 h-6 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          −
+                        </button>
+                        <span className="w-4 text-center text-[var(--text-primary)]">0</span>
+                        <button
+                          className="w-6 h-6 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddToCart(item, 1);
+                          }}
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -129,7 +130,7 @@ const HomePage: React.FC = () => {
                       disabled={(pagination.page || 0) === 0}
                       className={`px-3 py-1 rounded-md ${
                         (pagination.page || 0) === 0
-                          ? 'pagination-buttoncursor-not-allowed'
+                          ? 'pagination-button cursor-not-allowed selected-opacity'
                           : 'pagination-button'
                       }`}
                     >
@@ -142,7 +143,7 @@ const HomePage: React.FC = () => {
                         onClick={() => handlePageChange(i)}
                         className={`w-8 h-8 flex items-center justify-center rounded-md ${
                           (pagination.page || 0) === i
-                            ? 'pagination-button'
+                            ? 'pagination-button selected-opacity'
                             : 'pagination-button'
                         }`}
                       >
@@ -155,7 +156,7 @@ const HomePage: React.FC = () => {
                       disabled={(pagination.page || 0) === totalPages - 1}
                       className={`px-3 py-1 rounded-md ${
                         (pagination.page || 0) === totalPages - 1
-                          ? 'pagination-button cursor-not-allowed'
+                          ? 'pagination-button cursor-not-allowed selected-opacity'
                           : 'pagination-button'
                       }`}
                     >

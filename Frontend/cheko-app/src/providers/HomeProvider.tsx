@@ -76,24 +76,15 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
   useEffect(() => {
     const fetchMenuItems = async () => {
       startLoading();
-      let data; 
-     
-      if (selectedCategory) {
-        data = await menuItemService.getPaginatedBySectionIdWithParams(
-          selectedCategory,
-          pagination.page || 0,
-          pagination.size || 9,
-          pagination.sort || 'name,asc'
-        );
-      } else {
-        // Fetch all items with search
-        data = await menuItemService.getPaginatedWithFilters(
-          pagination.page || 0,
-          pagination.size || 9,
-          pagination.sort || 'name,asc',
-          searchQuery
-        );
-      }
+      
+      // Use the new method that supports both search and category filtering
+      const data = await menuItemService.getPaginatedWithFiltersAndSection(
+        pagination.page || 0,
+        pagination.size || 9,
+        pagination.sort || 'name,asc',
+        searchQuery,
+        selectedCategory
+      );
       
       setMenuItems(data.content);
       setTotalPages(data.totalPages);

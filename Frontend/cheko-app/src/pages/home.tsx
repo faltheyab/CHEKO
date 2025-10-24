@@ -24,6 +24,7 @@ const HomePage: React.FC = () => {
     isModalOpen,
     cartItemCount,
     isLoading,
+    totalItems,
     handleSearch,
     handleCategorySelect,
     handlePageChange,
@@ -53,39 +54,11 @@ const HomePage: React.FC = () => {
       </section>
       
       {/* Section 3: Menu Items */}
-       <div className="flex items-center justify-between bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl p-4 shadow-sm hover:shadow-md transition-all">
-      {/* Left: Image */}
-      <img
-        src="https://images.unsplash.com/photo-1604909053002-e9ad26553097?auto=format&fit=crop&w=400&q=80"
-        alt="Breakfast Gold"
-        className="w-28 h-28 object-cover rounded-lg"
-      />
-
-      {/* Middle: Info */}
-      <div className="flex-1 px-4">
-        <h3 className="text-[var(--text-primary)] font-semibold text-lg">
-          Breakfast Gold
-        </h3>
-        <p className="text-[var(--text-secondary)] text-sm mt-1">200 Cal</p>
-        <p className="text-[#e4b6cc] font-semibold text-lg mt-2">80 SR</p>
-      </div>
-
-      {/* Right: Quantity Controls */}
-      <div className="flex items-center gap-2">
-        <button className="w-8 h-8 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition">
-          −
-        </button>
-        <span className="w-4 text-center text-[var(--text-primary)]">0</span>
-        <button className="w-8 h-8 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition">
-          +
-        </button>
-      </div>
-    </div>
       <section>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{getCategoryName()}</h2>
-          <div className="text-sm text-gray-500 dark:text-gray-400">
-            {menuItems?.length || 0} items
+          <h2 className="text-2xl font-bold text-primary-color">{getCategoryName()}</h2>
+          <div className="text-sm font-bold text-primary-color">
+            { totalItems || 0} 
           </div>
         </div>
         
@@ -98,14 +71,52 @@ const HomePage: React.FC = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {menuItems?.map(item => (
-                  <MenuItemCard
+                  <div
                     key={item.id}
-                    item={item}
-                    onAddToCart={handleAddToCart}
-                    onViewDetails={handleItemClick}
-                  />
+                    className="flex items-center justify-between bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl p-4 shadow-sm hover:shadow-md transition-all"
+                    onClick={() => handleItemClick(item)}
+                  >
+                    {/* Left: Image */}
+                    <img
+                      src={item.imageUrl || "https://images.unsplash.com/photo-1604909053002-e9ad26553097?auto=format&fit=crop&w=400&q=80"}
+                      alt={item.name}
+                      className="w-28 h-28 object-cover rounded-lg"
+                    />
+
+                    {/* Middle: Info */}
+                    <div className="flex-1 px-3">
+                      <h3 className="text-[var(--text-primary)] font-semibold text-lg">
+                        {item.name}
+                      </h3>
+                      <p className="text-[var(--text-secondary)] text-sm mt-1">{item.calories || '0'} Cal</p>
+                      <p className="text-[#e4b6cc] font-semibold text-lg mt-2">{item.price} SR</p>
+                    </div>
+
+                    {/* Right: Quantity Controls */}
+                    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        className="w-8 h-8 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Decrease quantity logic would go here
+                        }}
+                      >
+                        −
+                      </button>
+                      <span className="w-4 text-center text-[var(--text-primary)]">0</span>
+                      <button
+                        className="w-8 h-8 flex items-center justify-center bg-[#f4cadf] text-black rounded-md hover:bg-[#f0bcd8] transition"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddToCart(item, 1);
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
                 ))}
               </div>
               
@@ -118,8 +129,8 @@ const HomePage: React.FC = () => {
                       disabled={(pagination.page || 0) === 0}
                       className={`px-3 py-1 rounded-md ${
                         (pagination.page || 0) === 0
-                          ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-600 cursor-not-allowed'
-                          : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                          ? 'pagination-buttoncursor-not-allowed'
+                          : 'pagination-button'
                       }`}
                     >
                       Previous
@@ -131,8 +142,8 @@ const HomePage: React.FC = () => {
                         onClick={() => handlePageChange(i)}
                         className={`w-8 h-8 flex items-center justify-center rounded-md ${
                           (pagination.page || 0) === i
-                            ? 'bg-blue-500 text-white'
-                            : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                            ? 'pagination-button'
+                            : 'pagination-button'
                         }`}
                       >
                         {i + 1}
@@ -144,8 +155,8 @@ const HomePage: React.FC = () => {
                       disabled={(pagination.page || 0) === totalPages - 1}
                       className={`px-3 py-1 rounded-md ${
                         (pagination.page || 0) === totalPages - 1
-                          ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-600 cursor-not-allowed'
-                          : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                          ? 'pagination-button cursor-not-allowed'
+                          : 'pagination-button'
                       }`}
                     >
                       Next

@@ -14,7 +14,7 @@ const LoadingContext = createContext<LoadingContextType>({
   isLoading: false,
   startLoading: () => {},
   stopLoading: () => {},
-  loadingText: 'Loading...',
+  loadingText: '',
   setLoadingText: () => {},
 });
 
@@ -28,7 +28,7 @@ interface LoadingProviderProps {
 // Provider component
 export const LoadingProvider: React.FC<LoadingProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingText, setLoadingText] = useState('Loading...');
+  const [loadingText, setLoadingText] = useState('');
 
   const startLoading = useCallback(() => {
     setIsLoading(true);

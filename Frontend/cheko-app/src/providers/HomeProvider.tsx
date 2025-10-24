@@ -46,6 +46,7 @@ interface HomeContextType {
   cart: CartItem[];
   cartItemCount: number;
   isLoading: boolean;
+  totalItems: number | null;
   handleSearch: (query: string, newFilters: Filters) => void;
   handleCategorySelect: (categoryId: number | null) => void;
   handlePageChange: (newPage: number) => void;
@@ -72,6 +73,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [categories, setCategories] = useState<MenuSectionWithItemCount[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [totalItems, setTotalItems] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<Filters>({
     priceRange: { min: 0, max: 100 },
@@ -180,45 +182,41 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
           
           setMenuItems(data?.content || []);
           setTotalPages(data?.totalPages || 1);
+          setTotalItems(data?.totalElements || 0)
         } finally {
           stopLoading();
         }
       } catch (error) {
         console.error('Error fetching menu items:', error);
-        // Set default values in case of error
         setMenuItems([]);
         setTotalPages(1);
+        setTotalItems(0)
       }
     };
     
     fetchMenuItems();
   }, [startLoading, stopLoading, selectedCategory, searchQuery, filters, pagination]);
   
-  // Handle search
   const handleSearch = (query: string, newFilters: Filters) => {
     setSearchQuery(query);
     setFilters(newFilters);
-    setPagination(prev => ({ ...prev, page: 0 })); // Reset to first page
+    setPagination(prev => ({ ...prev, page: 0 })); 
   };
   
-  // Handle category selection
   const handleCategorySelect = (categoryId: number | null) => {
     setSelectedCategory(categoryId);
-    setPagination(prev => ({ ...prev, page: 0 })); // Reset to first page
+    setPagination(prev => ({ ...prev, page: 0 })); 
   };
   
-  // Handle pagination
   const handlePageChange = (newPage: number) => {
     setPagination(prev => ({ ...prev, page: newPage }));
   };
   
-  // Handle item click to open modal
   const handleItemClick = (item: MenuItem) => {
     setSelectedItem(item);
     setIsModalOpen(true);
   };
   
-  // Handle add to cart
   const handleAddToCart = (item: MenuItem, quantity: number) => {
     setCart(prevCart => {
       // Check if item already exists in cart
@@ -236,14 +234,12 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     });
   };
   
-  // Get category name
   const getCategoryName = () => {
     if (!selectedCategory) return 'All Categories';
     const category = categories.find(cat => cat.id === selectedCategory);
     return category ? category.name : 'Selected Category';
   };
 
-  // Context value
   const contextValue: HomeContextType = {
     menuItems,
     categories,
@@ -257,6 +253,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     cart,
     cartItemCount,
     isLoading,
+    totalItems,
     handleSearch,
     handleCategorySelect,
     handlePageChange,

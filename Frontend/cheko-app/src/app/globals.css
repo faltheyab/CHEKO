@@ -447,6 +447,7 @@ body {
     height: 50px;
     width: 130px;
     margin-top: 7px;
+    transition: transform 0.25s ease, color 0.25s ease;
 }
 input:focus,
 input:focus-visible {
@@ -508,4 +509,20 @@ input:focus-visible {
   margin-left: 0.5rem;
   font-size: 1rem;
   font-weight: 600;
+}
+.text-primary-color{
+  color:var(--text-primary)
+}
+.h-px{
+  background: var(--input-placeholder);
+}
+.pagination-button{
+    background: var(--foreground);
+    color: var(--button-text);
+    border-radius: 16px;
+    transition: transform 0.25s ease, color 0.25s ease;
+}
+.pagination-button:hover, .sreach-button:hover {
+   transform: scale(1.03); 
+  color: var(--text-primary);
 }

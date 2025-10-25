@@ -21,5 +21,4 @@ import java.util.List;
 @RequestMapping("/api/order-items")
 @Tag(name = "Order Item", description = "Order items APIs")
 public class OrderItemController {
-
 }

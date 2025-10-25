@@ -9,13 +9,5 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface MenuSectionService {
-    List<MenuSectionResponse> getAllMenuSections();
-    MenuSectionResponse getMenuSectionById(Long id);
-    Page<MenuSectionResponse> getMenuSectionByIdPaginated(Long id, String name, Pageable pageable);
-    List<MenuSectionResponse> getMenuSectionsByBranchId(Long branchId);
-    MenuSectionResponse createMenuSection(MenuSectionRequest menuSectionRequest);
-    MenuSectionResponse updateMenuSection(Long id, MenuSectionRequest menuSectionRequest);
-    void deleteMenuSection(Long id);
-    List<MenuSectionWithCountResponse> getAllMenuSectionsWithCounts();
     List<MenuSectionWithCountResponse> getMenuSectionsByBranchIdWithCounts(Long branchId);
 }

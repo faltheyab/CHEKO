@@ -65,7 +65,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       startLoading();
-      const data = await menuSectionService.getMenuSectionsWithCounts();
+      const data = await menuSectionService.getWithItemCountsByBranchId(1);
       setCategories(data);
       stopLoading();
     };

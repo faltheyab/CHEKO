@@ -17,6 +17,4 @@ import java.util.List;
 @RequestMapping("/api/orders")
 @Tag(name = "Order", description = "Order APIs")
 public class OrderController {
-
-
 }

@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MenuSectionResponse {
-
     private Long id;
     private Long branchId;
     private String branchName;

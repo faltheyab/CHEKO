@@ -1,0 +1,11 @@
+# PostgreSQL 17 + PostGIS 3.4
+FROM postgis/postgis:17-3.4
+
+ENV POSTGRES_DB=restaurant_db
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=postgres
+
+COPY schema.sql /docker-entrypoint-initdb.d/1-schema.sql
+COPY Data.sql   /docker-entrypoint-initdb.d/2-data.sql
+
+EXPOSE 5432

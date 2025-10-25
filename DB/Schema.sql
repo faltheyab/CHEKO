@@ -1,3 +1,6 @@
+CREATE SCHEMA IF NOT EXISTS restaurant;
+CREATE EXTENSION IF NOT EXISTS postgis SCHEMA restaurant;
+
 CREATE TABLE restaurant.branches (
     id               SERIAL PRIMARY KEY,
     branch_name      VARCHAR(255) NOT NULL,

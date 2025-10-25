@@ -1,32 +1,32 @@
 version: "3.8"
 
 services:
-  frontend:
-    build: ./frontend
-    container_name: frontend
+  Frontend:
+    build: ./Frontend
+    container_name: Frontend
     ports:
       - "80:80"
     depends_on:
-      - backend
+      - Backend
     environment:
       - REACT_APP_API_URL=http://cheko.fae.sale
 
-  backend:
-    build: ./backend
-    container_name: backend
+  Backend:
+    build: ./Backend
+    container_name: Backend
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      - DB
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/restaurant_db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://DB:5432/restaurant_db
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
       - SPRING_PROFILES_ACTIVE=test
 
-  db:
-    build: ./db
+  DB:
+    build: ./DB
     container_name: postgres17-postgis
     environment:
       - POSTGRES_DB=restaurant_db

@@ -1,4 +1,4 @@
-# CHEKO - Restaurant Management System
+# CHEKO - Restaurant Management System:
 
 CHEKO is a comprehensive restaurant management system built with modern technologies to streamline restaurant operations.
 

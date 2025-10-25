@@ -1,4 +1,4 @@
-# CHEKO Frontend
+# CHEKO Frontend:
 
 High-level overview of the CHEKO restaurant management system frontend.
 

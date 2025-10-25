@@ -1,4 +1,4 @@
-# CHEKO Database
+# CHEKO Database:
 
 High-level overview of the CHEKO restaurant management system database.
 

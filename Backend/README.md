@@ -1,4 +1,4 @@
-# CHEKO Backend
+# CHEKO Backend:
 
 High-level overview of the CHEKO restaurant management system backend.
 

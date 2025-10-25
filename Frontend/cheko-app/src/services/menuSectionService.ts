@@ -3,21 +3,6 @@ import { MenuSection, MenuSectionWithItemCount } from '@/src/types/menuSection';
 import { logger } from '@/src/utils/logger';
 
 export const menuSectionService = {
-  // Get all menu sections
-  getAll: () => httpClient.get<MenuSection[]>('/menu-sections'),
-  
-  // Get menu section by ID
-  getById: (id: number) => {
-    try {
-      return httpClient.get<MenuSection>(`/menu-sections/${id}`);
-    } catch (error) {
-      logger.error(`Failed to fetch menu section with ID ${id}:`, error);
-      throw error;
-    }
-  },
-  
-  // Get all menu sections with item counts
-  getAllWithItemCounts: () => httpClient.get<MenuSectionWithItemCount[]>('/menu-sections/with-counts'),
   
   // Get menu sections by branch ID
   getByBranchId: (branchId: number) => {
@@ -45,7 +30,7 @@ export const menuSectionService = {
       return await httpClient.get<MenuSectionWithItemCount[]>('/menu-sections/with-counts');
     } catch (error) {
       logger.error('Failed to fetch menu sections with counts:', error);
-      return []; // Return empty array on error
+      return []; 
     }
   },
 };

@@ -37,91 +37,10 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public List<MenuItemResponse> getAllMenuItems() {
-        return menuItemRepository.findAll().stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public MenuItemResponse getMenuItemById(Long id) {
-        MenuItem menuItem = menuItemRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.create("MenuItem", "id", id));
-        return mapToResponse(menuItem);
-    }
-
-    @Override
-    public List<MenuItemResponse> getMenuItemsBySectionId(Long sectionId) {
-        return menuItemRepository.findBySectionId(sectionId).stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<MenuItemResponse> getMenuItemsByBranchId(Long branchId) {
-        return menuItemRepository.findByBranchId(branchId).stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<MenuItemResponse> getAvailableMenuItemsByBranchId(Long branchId) {
         return menuItemRepository.findAvailableByBranchId(branchId).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<MenuItemResponse> getMenuItemsByMaxPrice(BigDecimal price) {
-        return menuItemRepository.findByPriceLessThanEqual(price).stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<MenuItemResponse> getMenuItemsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
-        return menuItemRepository.findByPriceBetween(minPrice, maxPrice).stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public MenuItemResponse createMenuItem(MenuItemRequest menuItemRequest) {
-        MenuItem menuItem = mapToEntity(menuItemRequest);
-        MenuItem savedMenuItem = menuItemRepository.save(menuItem);
-        return mapToResponse(savedMenuItem);
-    }
-
-    @Override
-    @Transactional
-    public MenuItemResponse updateMenuItem(Long id, MenuItemRequest menuItemRequest) {
-        MenuItem menuItem = menuItemRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.create("MenuItem", "id", id));
-        
-        updateMenuItemFromRequest(menuItem, menuItemRequest);
-        MenuItem updatedMenuItem = menuItemRepository.save(menuItem);
-        return mapToResponse(updatedMenuItem);
-    }
-
-    @Override
-    @Transactional
-    public void deleteMenuItem(Long id) {
-        if (!menuItemRepository.existsById(id)) {
-            throw ResourceNotFoundException.create("MenuItem", "id", id);
-        }
-        menuItemRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional
-    public MenuItemResponse updateMenuItemAvailability(Long id, Boolean isAvailable) {
-        MenuItem menuItem = menuItemRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.create("MenuItem", "id", id));
-        
-        menuItem.setIsAvailable(isAvailable);
-        MenuItem updatedMenuItem = menuItemRepository.save(menuItem);
-        return mapToResponse(updatedMenuItem);
     }
     
     @Override

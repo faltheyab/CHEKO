@@ -13,15 +13,4 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-
-    Optional<Customer> findByEmail(String email);
-    Optional<Customer> findByPhone(String phone);
-    List<Customer> findByFullNameContainingIgnoreCase(String name);
-    boolean existsByEmail(String email);
-    boolean existsByPhone(String phone);
-    @Query(value = "SELECT c.* FROM restaurant.customers c " +
-                  "WHERE ST_DWithin(c.location, :location, :distance) " +
-                  "ORDER BY ST_Distance(c.location, :location)", 
-           nativeQuery = true)
-    List<Customer> findNearbyCustomers(@Param("location") Point location, @Param("distance") double distance);
 }

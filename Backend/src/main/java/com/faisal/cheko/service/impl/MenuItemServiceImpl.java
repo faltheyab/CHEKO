@@ -47,6 +47,20 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
     
     @Override
+    public Page<MenuItemResponse> getMenuItemsByBranchIdAndBySectionIdPaginated(Long branchId, Long sectionId, Pageable pageable) {
+        if (!branchRepository.existsById(branchId)) {
+            throw ResourceNotFoundException.create("Branch", "id", branchId);
+        }
+        
+        if (!menuSectionRepository.existsById(sectionId)) {
+            throw ResourceNotFoundException.create("MenuSection", "id", sectionId);
+        }
+        
+        return menuItemRepository.findByBranchIdAndSectionId(branchId, sectionId, pageable)
+                .map(this::mapToResponse);
+    }
+    
+    @Override
     public Page<MenuItemResponse> getMenuItemsByBranchIdPaginated(Long branchId, Pageable pageable) {
         if (!branchRepository.existsById(branchId)) {
             throw ResourceNotFoundException.create("Branch", "id", branchId);
@@ -74,22 +88,26 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
     
     @Override
-    public Page<MenuItemResponse> getAvailableMenuItemsBySectionIdPaginated(Long sectionId, String nameQuery, Pageable pageable) {
+    public Page<MenuItemResponse> getAvailableMenuItemsByBranchIdAndBySectionIdPaginated(Long branchId, Long sectionId, String nameQuery, Pageable pageable) {
+        if (!branchRepository.existsById(branchId)) {
+            throw ResourceNotFoundException.create("Branch", "id", branchId);
+        }
+        
         if (!menuSectionRepository.existsById(sectionId)) {
             throw ResourceNotFoundException.create("MenuSection", "id", sectionId);
         }
         
-        return menuItemRepository.findAvailableBySectionIdWithSearch(sectionId, nameQuery, pageable)
+        return menuItemRepository.findAvailableByBranchIdAndSectionIdWithSearch(branchId, sectionId, nameQuery, pageable)
                 .map(this::mapToResponse);
     }
-    
+
+
     @Override
     public List<MenuItemResponse> getSecondHighestCalorieMealPerCategory() {
         return menuItemRepository.findSecondHighestCalorieMealPerCategory().stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
-
 
     private MenuItemResponse mapToResponse(MenuItem menuItem) {
         return MenuItemResponse.builder()
@@ -106,7 +124,6 @@ public class MenuItemServiceImpl implements MenuItemService {
                 .isAvailable(menuItem.getIsAvailable())
                 .build();
     }
-
 
     private MenuItem mapToEntity(MenuItemRequest menuItemRequest) {
         MenuItem menuItem = new MenuItem();

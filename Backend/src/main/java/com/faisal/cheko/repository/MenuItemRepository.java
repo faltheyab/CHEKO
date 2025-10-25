@@ -40,6 +40,12 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
     
     @Query("SELECT mi FROM MenuItem mi WHERE mi.section.id = :sectionId AND mi.isAvailable = true AND (:nameQuery IS NULL OR :nameQuery = '' OR LOWER(mi.name) LIKE LOWER(CONCAT('%', :nameQuery, '%')))")
     Page<MenuItem> findAvailableBySectionIdWithSearch(@Param("sectionId") Long sectionId, @Param("nameQuery") String nameQuery, Pageable pageable);
+    
+    @Query("SELECT mi FROM MenuItem mi JOIN mi.section ms WHERE ms.branch.id = :branchId AND ms.id = :sectionId")
+    Page<MenuItem> findByBranchIdAndSectionId(@Param("branchId") Long branchId, @Param("sectionId") Long sectionId, Pageable pageable);
+    
+    @Query("SELECT mi FROM MenuItem mi JOIN mi.section ms WHERE ms.branch.id = :branchId AND ms.id = :sectionId AND mi.isAvailable = true AND (:nameQuery IS NULL OR :nameQuery = '' OR LOWER(mi.name) LIKE LOWER(CONCAT('%', :nameQuery, '%')))")
+    Page<MenuItem> findAvailableByBranchIdAndSectionIdWithSearch(@Param("branchId") Long branchId, @Param("sectionId") Long sectionId, @Param("nameQuery") String nameQuery, Pageable pageable);
 
     /*
 

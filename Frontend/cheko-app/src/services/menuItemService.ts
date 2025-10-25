@@ -62,7 +62,8 @@ export const menuItemService = {
     size: number = 10,
     sort: string = 'name,asc',
     searchQuery?: string,
-    sectionId?: number | null
+    sectionId?: number | null,
+    branchId: number = 1
   ) => {
     try {
       const queryParams = new URLSearchParams();
@@ -77,15 +78,15 @@ export const menuItemService = {
       
       if (searchQuery) queryParams.append('search', searchQuery);
       
-      // If section ID is provided, use the section-specific endpoint
+      // If section ID is provided, use the branch and section-specific endpoint
       if (sectionId) {
         return await httpClient.get<PaginatedResponse<MenuItem>>(
-          `/menu-items/section/${sectionId}/available?${queryParams.toString()}`
+          `/menu-items/branch/${branchId}/section/${sectionId}/available?${queryParams.toString()}`
         );
       } else {
         // Otherwise use the branch endpoint
         return await httpClient.get<PaginatedResponse<MenuItem>>(
-          `/menu-items/branch/1/available/paginated?${queryParams.toString()}`
+          `/menu-items/branch/${branchId}/available/paginated?${queryParams.toString()}`
         );
       }
     } catch (error) {

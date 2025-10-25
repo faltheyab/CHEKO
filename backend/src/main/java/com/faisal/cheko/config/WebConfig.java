@@ -29,7 +29,8 @@ public class WebConfig implements WebMvcConfigurer {
         "http://localhost:8080", "https://localhost:8080",
         "http://127.0.0.1:3000", "https://127.0.0.1:3000",
         "http://127.0.0.1:8080", "https://127.0.0.1:8080",
-         "https://0.0.0.0:8080", "http://0.0.0.0:8080"
+        "https://0.0.0.0:8080", "http://0.0.0.0:8080",
+        "http://cheko.fae.sale","https://cheko.fae.sale"
     };
     
     private final String[] ALLOWED_METHODS = {

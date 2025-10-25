@@ -2,7 +2,10 @@ version: "3.8"
 
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        BACKEND_URL: http://cheko.fae.sale:8080/api
     container_name: frontend
     ports:
       - "80:3000"

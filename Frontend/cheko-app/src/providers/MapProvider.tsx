@@ -12,6 +12,7 @@ interface MapContextType {
   loading: boolean;
   error: string | null;
   mapMarkers: MapMarker[];
+  selectedBranchIds: number[];
   handleSearch: (query: string) => void;
   handleMarkerClick: (id: number) => void;
 }
@@ -29,7 +30,7 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
   const [filteredBranches, setFilteredBranches] = useState<Branch[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  const [selectedBranchIds, setSelectedBranchIds] = useState<number[]>([]);
 
   // Fetch branches on component mount
   useEffect(() => {
@@ -46,25 +47,35 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
 
   // Handle search
   const handleSearch = (query: string) => {
+    setSelectedBranchIds([]);
+   
     if (!query.trim()) {
-      setFilteredBranches(branches);
       return;
     }
 
-    const filtered = branches.filter(branch => 
-      branch.branchName.toLowerCase().includes(query.toLowerCase()) ||
-      branch.address.toLowerCase().includes(query.toLowerCase())
-    );
+    const searchTerm = query.trim().toLowerCase();
+    const filtered = branches.filter(branch => branch.branchName.toLowerCase().includes(searchTerm));
+    console.log("Seached: "+query)
+    console.log("Result:" +filtered);
     setFilteredBranches(filtered);
+    
+    if (filtered.length > 0) {
+      const ids = filtered.map(branch => branch.id);
+      setSelectedBranchIds(ids);
+    }
   };
 
   // Handle marker click
   const handleMarkerClick = (id: number) => {
-    // Just handle the marker click without navigation
-    console.log(`Marker clicked: ${id}`);
+    setSelectedBranchIds(prevIds => {
+      if (prevIds.includes(id)) {
+        return prevIds.filter(branchId => branchId !== id);
+      } else {
+        return [...prevIds, id];
+      }
+    });
   };
 
-  // Convert branches to map markers - show all branches, not just filtered ones
   const mapMarkers: MapMarker[] = branches.map(branch => ({
     id: branch.id,
     lng: branch.longitude,
@@ -73,7 +84,7 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
     description: branch.address,
     isActive: branch.isActive,
     openingHours: branch.openingHours,
-    phone: branch.phoneNumber,
+    phone: branch.phone,
     email: branch.email,
     isMainBranch: branch.isMainBranch
   }));
@@ -85,6 +96,7 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
     loading,
     error,
     mapMarkers,
+    selectedBranchIds,
     handleSearch,
     handleMarkerClick
   };
@@ -104,5 +116,3 @@ export const useMap = (): MapContextType => {
   }
   return context;
 };
-
-// Made with Bob

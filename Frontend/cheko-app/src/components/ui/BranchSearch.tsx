@@ -12,6 +12,10 @@ const BranchSearch: React.FC<BranchSearchProps> = ({ onSearch }) => {
     onSearch(query);
   };
 
+  const handleButtonClick = () => {
+    onSearch(query);
+  };
+
   return (
     <form onSubmit={handleSubmit} className="w-full mb-6 relative z-10">
       <div className='flex search-bar-container'>
@@ -39,6 +43,7 @@ const BranchSearch: React.FC<BranchSearchProps> = ({ onSearch }) => {
         />
         <button
           type="submit"
+          onClick={handleButtonClick}
           className="px-4 py-2 sreach-button">
           Search
         </button>

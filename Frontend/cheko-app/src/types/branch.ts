@@ -5,7 +5,7 @@ export interface Branch {
   id: number;
   branchName: string;
   address: string;
-  phoneNumber: string;
+  phone: string;
   email: string;
   latitude: number;
   longitude: number;
@@ -14,15 +14,4 @@ export interface Branch {
   openingHours: OpeningHoursSchedule;
 }
 
-export interface BranchRequest {
-  name: string;
-  address: string;
-  phoneNumber: string;
-  email: string;
-  latitude: number;
-  longitude: number;
-  isActive: boolean;
-  isMainBranch: boolean;
-  openingHours: OpeningHoursSchedule;
-}
 

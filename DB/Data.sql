@@ -30,6 +30,56 @@ VALUES
    "saturday":{"open":"08:00","close":"23:00"}
  }', TRUE, TRUE);
 
+ INSERT INTO restaurant.branches
+(branch_name, address, city, country, phone, email, location, opening_hours, is_main_branch, is_active)
+VALUES
+('Al Malqa Branch', 'King Salman Rd, Al Malqa, Riyadh', 'Riyadh', 'Saudi Arabia',
+ '+966500000002', 'malqa@restaurant.com',
+ ST_GeogFromText('SRID=4326;POINT(46.624 24.789)'),
+ '{
+   "sunday":{"open":"09:00","close":"22:00"},
+   "monday":{"open":"09:00","close":"22:00"},
+   "tuesday":{"open":"09:00","close":"22:00"},
+   "wednesday":{"open":"09:00","close":"22:00"},
+   "thursday":{"open":"09:00","close":"00:00"},
+   "friday":{"open":"14:00","close":"01:00"},
+   "saturday":{"open":"09:00","close":"22:00"}
+ }', FALSE, TRUE);
+
+
+INSERT INTO restaurant.branches
+(branch_name, address, city, country, phone, email, location, opening_hours, is_main_branch, is_active)
+VALUES
+('Al Nakheel Branch', 'Imam Saud Rd, Al Nakheel, Riyadh', 'Riyadh', 'Saudi Arabia',
+ '+966500000003', 'nakheel@restaurant.com',
+ ST_GeogFromText('SRID=4326;POINT(46.701 24.746)'),
+ '{
+   "sunday":{"open":"07:30","close":"22:30"},
+   "monday":{"open":"07:30","close":"22:30"},
+   "tuesday":{"open":"07:30","close":"22:30"},
+   "wednesday":{"open":"07:30","close":"22:30"},
+   "thursday":{"open":"07:30","close":"00:00"},
+   "friday":{"open":"13:00","close":"00:30"},
+   "saturday":{"open":"08:00","close":"22:30"}
+ }', FALSE, TRUE);
+
+
+INSERT INTO restaurant.branches
+(branch_name, address, city, country, phone, email, location, opening_hours, is_main_branch, is_active)
+VALUES
+('Al Rawdah Branch', 'Prince Bandar Rd, Al Rawdah, Riyadh', 'Riyadh', 'Saudi Arabia',
+ '+966500000004', 'rawdah@restaurant.com',
+ ST_GeogFromText('SRID=4326;POINT(46.785 24.744)'),
+ '{
+   "sunday":{"open":"09:00","close":"21:00"},
+   "monday":{"open":"09:00","close":"21:00"},
+   "tuesday":{"open":"09:00","close":"21:00"},
+   "wednesday":{"open":"09:00","close":"21:00"},
+   "thursday":{"open":"09:00","close":"23:00"},
+   "friday":{"open":"14:00","close":"23:30"},
+   "saturday":{"open":"09:00","close":"21:00"}
+ }', FALSE, FALSE);
+
 -- ==============================
 -- MENU SECTIONS
 -- ==============================

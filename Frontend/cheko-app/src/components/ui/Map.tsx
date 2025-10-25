@@ -44,33 +44,38 @@ interface MapProps {
   width?: string;
   height?: string;
   mapboxToken?: string;
+  selectedMarkers?: number[];
 }
 
 const Map: React.FC<MapProps> = ({
   initialLng,
   initialLat,
-  initialZoom = 13,
+  initialZoom = 10,
   markers = [],
   onMarkerClick,
   width = '100%',
   height = '100%',
   mapboxToken = 'pk.eyJ1IjoiZmFpc2Fsc2FsZW0xMjM0NTYiLCJhIjoiY21oNmZ2b3NnMGhvcTJrc2R0MmlmcDh6MyJ9._vJolqT0e30CQ1Lklq3iuA',
+  selectedMarkers = [],
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  
+  // Calculate map center coordinates - prioritize main branch
   const { mapLng, mapLat } = useMemo(() => {
-
+    // If coordinates are explicitly provided, use them
     if (initialLng !== undefined && initialLat !== undefined) {
       return { mapLng: initialLng, mapLat: initialLat };
     }
     
-    const firstOpenBranch = markers.find(marker => marker.isActive);
-    if (firstOpenBranch) {
-      return { mapLng: firstOpenBranch.lng, mapLat: firstOpenBranch.lat };
+    // First priority: Find the main branch
+    const mainBranch = markers.find(marker => marker.isMainBranch === true);
+    if (mainBranch) {
+      console.log("Centering map on main branch:", mainBranch.title);
+      return { mapLng: mainBranch.lng, mapLat: mainBranch.lat };
     }
     
-    // Default to Saudi Arabia coordinates if no open branch found
+    // Default to Saudi Arabia coordinates if no suitable branch found
+    console.log("No suitable branch found, using default coordinates");
     return { mapLng: 45.0792, mapLat: 23.8859 };
   }, [initialLng, initialLat, markers]);
 
@@ -127,32 +132,61 @@ const Map: React.FC<MapProps> = ({
     };
   }, [mapLat, mapLng, initialZoom, mapboxToken]);
 
+  // Store marker references to access them later for showing popups
+  const markerRefs = useRef<{ [key: number]: mapboxgl.Marker }>({});
+
+  // Show popups for selected markers
+  useEffect(() => {
+    
+    // Close all popups first
+    Object.values(markerRefs.current).forEach(marker => {
+      console.log("marker",marker.getPopup())
+      const popup = marker.getPopup();
+      if (popup) {
+         popup.remove(); 
+      }
+    });
+    
+    // Open popups for selected markers
+    if (selectedMarkers.length > 0) {
+      selectedMarkers.forEach(id => {
+        if (markerRefs.current[id]) {
+          console.log(`Showing popup for marker ${id}`);
+          markerRefs.current[id].togglePopup();
+        }
+      });
+    }
+  }, [selectedMarkers]);
+
   useEffect(() => {
     if (!map.current || !markers.length) return;
 
     const existingMarkers = document.querySelectorAll('.mapboxgl-marker');
     existingMarkers.forEach(marker => marker.remove());
+    
+    // Clear marker references when recreating markers
+    markerRefs.current = {};
 
     // Add new markers
     markers.forEach(marker => {
       // Create marker element
       const el = document.createElement('div');
       el.className = 'marker';
-      const markerColor = marker.isActive ? '#4CAF50' : '#F44336'; // Green for active, Red for inactive
+      const markerColor = marker.isActive ? '#f4cadf' : '#F44336'; 
       
       // Create a custom marker element
-      el.style.width = '24px';
-      el.style.height = '24px';
+      el.style.width = '30px';
+      el.style.height = '30px';
       el.style.borderRadius = '50%';
       el.style.backgroundColor = markerColor;
-      el.style.border = '2px solid white';
+      el.style.border = '2px solid black';
       el.style.boxShadow = '0 0 10px rgba(0,0,0,0.3)';
       el.style.cursor = 'pointer';
 
       // Create popup content with status indicator
-      const statusLabel = marker.isActive 
-        ? '<span style="color: #4CAF50; font-weight: bold;">Open</span>' 
-        : '<span style="color: #F44336; font-weight: bold;">Closed</span>';
+      const statusLabel = marker.isActive
+        ? '<span style="color: #52b86b; font-weight: bold;">Open</span>'
+        : '<span style="color: #F44336; font-weight: bold;">Closed Permanently</span>';
       
       // Format opening hours if available
       let hoursDisplay = '';
@@ -197,12 +231,21 @@ const Map: React.FC<MapProps> = ({
       // Create popup
       const popup = new mapboxgl.Popup({ offset: 15 }).setHTML(popupContent);
 
-      // Add marker to map with null check
       if (map.current) {
-        new mapboxgl.Marker(el)
+        // Create the marker and store a reference to it
+        const mapMarker = new mapboxgl.Marker(el)
           .setLngLat([marker.lng, marker.lat])
           .setPopup(popup)
           .addTo(map.current);
+        
+        // Store reference to the marker
+        markerRefs.current[marker.id] = mapMarker;
+        
+        // If this is one of the selected markers, show its popup
+        if (selectedMarkers.includes(marker.id)) {
+          console.log(`Auto-showing popup for marker ${marker.id}`);
+          mapMarker.togglePopup();
+        }
       }
 
       if (onMarkerClick) {
@@ -212,13 +255,13 @@ const Map: React.FC<MapProps> = ({
       }
     });
 
-    // Fit bounds to markers if there are multiple markers
-    if (markers.length > 1 && map.current) {
+    // Always fit bounds to show all markers
+    if (markers.length > 0 && map.current) {
       const bounds = new mapboxgl.LngLatBounds();
       markers.forEach(marker => {
         bounds.extend([marker.lng, marker.lat]);
       });
-      map.current.fitBounds(bounds, { padding: 50 });
+      map.current.fitBounds(bounds, { padding: 100 });
     }
   }, [markers, onMarkerClick]);
 

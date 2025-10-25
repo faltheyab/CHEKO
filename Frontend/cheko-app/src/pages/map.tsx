@@ -9,11 +9,12 @@ import { MapProvider, useMap } from '@/src/providers/MapProvider';
 const MapPageContent: React.FC = () => {
   const { 
     filteredBranches, 
-    loading, 
-    error, 
-    mapMarkers, 
-    handleSearch, 
-    handleMarkerClick 
+    loading,
+    error,
+    mapMarkers,
+    selectedBranchIds,
+    handleSearch,
+    handleMarkerClick
   } = useMap();
 
   return (
@@ -24,7 +25,7 @@ const MapPageContent: React.FC = () => {
       </Head>
 
        <TopMenuBar />
-      <div className="container">
+      <div className="">
         {/*  Search Bar */}
         <section className="mb-8 layout px-4 py-6 ">
           <BranchSearch onSearch={handleSearch} />
@@ -33,9 +34,22 @@ const MapPageContent: React.FC = () => {
         
         {/* Status messages */}
         {error && <p className="text-center py-4 text-red-500">{error}</p>}
-        {!loading && !error && filteredBranches.length === 0 && (
-          <p className="text-center py-4">No branches found. Try a different search.</p>
-        )}
+        
+        {/* Sliding notification for no branches found */}
+        <div
+          className={`absolute left-0 top-1/4 z-50 transform transition-transform duration-500 ease-in-out ${
+            !loading && !error && filteredBranches.length === 0
+              ? 'translate-x-0'
+              : '-translate-x-full'
+          }`}
+        >
+          <div className="bg-[#f4cadf] text-gray-800 px-6 py-4 rounded-r-lg shadow-lg flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="font-medium">No branches found. Try a different search.</span>
+          </div>
+        </div>
         
         <Loader isLoading={loading} size="large">
           {/* Map component - visible on all devices */}
@@ -43,6 +57,7 @@ const MapPageContent: React.FC = () => {
             <Map
               markers={mapMarkers}
               onMarkerClick={handleMarkerClick}
+              selectedMarkers={selectedBranchIds}
             />
           </div>
           

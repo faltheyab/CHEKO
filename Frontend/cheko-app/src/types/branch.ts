@@ -1,14 +1,17 @@
 // Branch interfaces
+import { OpeningHoursSchedule } from '@/src/components/ui/Map';
 
 export interface Branch {
   id: number;
-  name: string;
+  branchName: string;
   address: string;
   phoneNumber: string;
   email: string;
   latitude: number;
   longitude: number;
   isActive: boolean;
+  isMainBranch: boolean;
+  openingHours: OpeningHoursSchedule;
 }
 
 export interface BranchRequest {
@@ -19,5 +22,7 @@ export interface BranchRequest {
   latitude: number;
   longitude: number;
   isActive: boolean;
+  isMainBranch: boolean;
+  openingHours: OpeningHoursSchedule;
 }
 

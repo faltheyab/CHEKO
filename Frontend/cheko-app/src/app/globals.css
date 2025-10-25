@@ -430,3 +430,144 @@ p {
 .slide-in-inactive {
   transform: translateX(-100%);
 }
+.map-container{
+  top: -57px;
+}
+
+.mapboxgl-popup {
+  z-index: 10;
+}
+
+
+.mapboxgl-popup-tip {
+  width: 30px !important; /* Much larger than default */
+  height: 30px !important;
+  border-width: 15px !important; /* Increase border width for larger tip */
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+
+.mapboxgl-popup-tip::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(135deg, var(--foreground) 0%, var(--primary) 100%);
+  border-radius: 50%;
+  top: -5px;
+  left: -5px;
+  box-shadow: 0 0 10px rgba(244, 202, 223, 0.7);
+  animation: pulse 2s infinite;
+}
+
+/* Add a subtle pulse animation */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(244, 202, 223, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(244, 202, 223, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(244, 202, 223, 0);
+  }
+}
+
+.mapboxgl-popup-content {
+  padding: 18px 15px 15px 15px !important;
+  border-radius: 25px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border: 0px solid var(--foreground);
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  width: 390px !important;
+}
+
+/* Make headings larger */
+.mapboxgl-popup-content h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.mapboxgl-popup-content h4 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+/* Style the close button */
+.mapboxgl-popup-close-button {
+  font-size: 35px !important;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 50%;
+  color: var(--text-primary) !important;
+  top: 13px !important;
+  right: 13px !important;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.mapboxgl-popup-close-button:hover {
+    background-color: transparent !important;
+    border-radius: 100px;
+}
+
+.mapboxgl-popup-close-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.dark .mapboxgl-popup-content {
+  background-color: var(--card-bg);
+  border-color: var(--foreground);
+}
+
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+  border-top-color: var(--foreground) !important;
+}
+
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+  border-bottom-color: var(--foreground) !important;
+}
+
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: var(--foreground) !important;
+}
+
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: var(--foreground) !important;
+}
+
+.opening-hours-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  background-color: rgba(244, 202, 223, 0.1);
+  font-size: 1.05rem;
+}
+
+.day-hours {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 1.05rem;
+}
+
+.current-day {
+  background-color: rgba(255, 107, 0, 0.1);
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin: 0 -8px;
+  font-size: 1.1rem;
+}

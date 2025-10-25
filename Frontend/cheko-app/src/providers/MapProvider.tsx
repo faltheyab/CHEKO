@@ -4,16 +4,6 @@ import branchService from '@/src/services/branchService';
 import { Branch } from '@/src/types/branch';
 import { MapMarker } from '@/src/components/ui/Map';
 
-// Mock opening hours data - in a real app, this would come from the API
-const mockOpeningHours = {
-  sunday: { open: '10:00 AM', close: '10:00 PM' },
-  monday: { open: '10:00 AM', close: '10:00 PM' },
-  tuesday: { open: '10:00 AM', close: '10:00 PM' },
-  wednesday: { open: '10:00 AM', close: '10:00 PM' },
-  thursday: { open: '10:00 AM', close: '10:00 PM' },
-  friday: { open: '10:00 AM', close: '11:00 PM' },
-  saturday: { open: '10:00 AM', close: '11:00 PM' },
-};
 
 // Define the context type
 interface MapContextType {
@@ -44,17 +34,11 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
   // Fetch branches on component mount
   useEffect(() => {
     const fetchBranches = async () => {
-      try {
-        setLoading(true);
-        const branches = await branchService.getAll();
-        setBranches(branches);
-        setFilteredBranches(branches);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to load branches. Please try again later.');
-        setLoading(false);
-        console.error('Error fetching branches:', err);
-      }
+      setLoading(true);
+      const branches = await branchService.getAll();
+      setBranches(branches);
+      setFilteredBranches(branches);
+      setLoading(false);
     };
 
     fetchBranches();
@@ -68,26 +52,30 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
     }
 
     const filtered = branches.filter(branch => 
-      branch.name.toLowerCase().includes(query.toLowerCase()) ||
+      branch.branchName.toLowerCase().includes(query.toLowerCase()) ||
       branch.address.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredBranches(filtered);
   };
 
-  // Handle marker click - navigate to branch details
+  // Handle marker click
   const handleMarkerClick = (id: number) => {
-    router.push(`/branch/${id}`);
+    // Just handle the marker click without navigation
+    console.log(`Marker clicked: ${id}`);
   };
 
-  // Convert branches to map markers
-  const mapMarkers: MapMarker[] = filteredBranches.map(branch => ({
+  // Convert branches to map markers - show all branches, not just filtered ones
+  const mapMarkers: MapMarker[] = branches.map(branch => ({
     id: branch.id,
     lng: branch.longitude,
     lat: branch.latitude,
-    title: branch.name,
+    title: branch.branchName,
     description: branch.address,
     isActive: branch.isActive,
-    openingHours: mockOpeningHours, // In a real app, this would come from the branch data
+    openingHours: branch.openingHours,
+    phone: branch.phoneNumber,
+    email: branch.email,
+    isMainBranch: branch.isMainBranch
   }));
 
   // Context value

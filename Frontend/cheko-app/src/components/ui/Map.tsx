@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -10,7 +10,7 @@ interface OpeningHours {
   close: string;
 }
 
-interface OpeningHoursSchedule {
+export interface OpeningHoursSchedule {
   sunday: OpeningHours;
   monday: OpeningHours;
   tuesday: OpeningHours;
@@ -29,6 +29,9 @@ export interface MapMarker {
   description?: string;
   isActive: boolean;
   openingHours?: OpeningHoursSchedule;
+  phone?: string;
+  email?: string;
+  isMainBranch?: boolean;
 }
 
 // Define props interface
@@ -44,28 +47,60 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({
-  initialLng = 45.0792, // Default to Saudi Arabia
-  initialLat = 23.8859,
-  initialZoom = 5,
+  initialLng,
+  initialLat,
+  initialZoom = 13,
   markers = [],
   onMarkerClick,
   width = '100%',
-  height = '500px',
-  mapboxToken = 'pk.your_mapbox_token_here', // Default token, should be replaced with actual token
+  height = '100%',
+  mapboxToken = 'pk.eyJ1IjoiZmFpc2Fsc2FsZW0xMjM0NTYiLCJhIjoiY21oNmZ2b3NnMGhvcTJrc2R0MmlmcDh6MyJ9._vJolqT0e30CQ1Lklq3iuA',
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
+  
+  const { mapLng, mapLat } = useMemo(() => {
 
-  // Format opening hours for display
+    if (initialLng !== undefined && initialLat !== undefined) {
+      return { mapLng: initialLng, mapLat: initialLat };
+    }
+    
+    const firstOpenBranch = markers.find(marker => marker.isActive);
+    if (firstOpenBranch) {
+      return { mapLng: firstOpenBranch.lng, mapLat: firstOpenBranch.lat };
+    }
+    
+    // Default to Saudi Arabia coordinates if no open branch found
+    return { mapLng: 45.0792, mapLat: 23.8859 };
+  }, [initialLng, initialLat, markers]);
+
   const formatOpeningHours = (schedule: OpeningHoursSchedule): string => {
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const today = new Date().getDay(); // 0 = Sunday, 1 = Monday, etc.
-    const todayName = days[today].toLowerCase();
     
-    // Get today's hours
-    const todayHours = schedule[todayName as keyof OpeningHoursSchedule];
+    let hoursHTML = '<div class="opening-hours-schedule">';
     
-    return `Today: ${todayHours.open} - ${todayHours.close}`;
+    days.forEach((day, index) => {
+      const dayHours = schedule[day as keyof OpeningHoursSchedule];
+      const isToday = index === today;
+      
+      const formattedDay = day.charAt(0).toUpperCase() + day.slice(1);
+      
+      if (isToday) {
+        hoursHTML += `<div class="day-hours current-day">
+          <span style="font-weight: bold; color: #ff6b00;">${formattedDay}:</span>
+          <span style="font-weight: bold;">${dayHours.open} - ${dayHours.close}</span>
+        </div>`;
+      } else {
+        hoursHTML += `<div class="day-hours">
+          <span>${formattedDay}:</span>
+          <span>${dayHours.open} - ${dayHours.close}</span>
+        </div>`;
+      }
+    });
+    
+    hoursHTML += '</div>';
+    return hoursHTML;
   };
 
   // Initialize map when component mounts
@@ -76,7 +111,7 @@ const Map: React.FC<MapProps> = ({
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v12',
-      center: [initialLng, initialLat],
+      center: [mapLng, mapLat],
       zoom: initialZoom,
       accessToken: mapboxToken,
     });
@@ -90,13 +125,11 @@ const Map: React.FC<MapProps> = ({
         map.current.remove();
       }
     };
-  }, [initialLat, initialLng, initialZoom, mapboxToken]);
+  }, [mapLat, mapLng, initialZoom, mapboxToken]);
 
-  // Add markers when markers prop changes or map is initialized
   useEffect(() => {
     if (!map.current || !markers.length) return;
 
-    // Remove existing markers
     const existingMarkers = document.querySelectorAll('.mapboxgl-marker');
     existingMarkers.forEach(marker => marker.remove());
 
@@ -124,15 +157,40 @@ const Map: React.FC<MapProps> = ({
       // Format opening hours if available
       let hoursDisplay = '';
       if (marker.openingHours) {
-        hoursDisplay = `<p style="margin-bottom: 4px;">Hours: ${formatOpeningHours(marker.openingHours)}</p>`;
+        hoursDisplay = `
+          <div style="margin-bottom: 8px;">
+            <h4 style="font-weight: bold; margin-bottom: 4px;">Opening Hours:</h4>
+            ${formatOpeningHours(marker.openingHours)}
+          </div>
+        `;
       }
       
+      // Add additional contact information if available
+      let contactInfo = '';
+      if (marker.phone || marker.email) {
+        contactInfo = `
+          <div style="margin-top: 8px; margin-bottom: 8px;">
+            ${marker.phone ? `<p style="margin-bottom: 4px;"><strong>Phone:</strong> ${marker.phone}</p>` : ''}
+            ${marker.email ? `<p style="margin-bottom: 4px;"><strong>Email:</strong> ${marker.email}</p>` : ''}
+          </div>
+        `;
+      }
+
+      // Add main branch badge if applicable
+      const mainBranchBadge = marker.isMainBranch
+        ? `<span style="background-color: #f4cadf; color: #333; font-size: 0.85rem; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">Main Branch</span>`
+        : '';
+
       const popupContent = `
         <div style="padding: 8px;">
-          <h3 style="font-weight: bold; margin-bottom: 4px;">${marker.title}</h3>
-          ${marker.description ? `<p style="margin-bottom: 4px;">${marker.description}</p>` : ''}
+          <h3 style="font-weight: bold; margin-bottom: 4px;">
+            ${marker.title}
+            ${mainBranchBadge}
+          </h3>
+          ${marker.description ? `<p style="margin-bottom: 8px;">${marker.description}</p>` : ''}
+          ${contactInfo}
           ${hoursDisplay}
-          <p>Status: ${statusLabel}</p>
+          <p style="margin-top: 8px;">Status: ${statusLabel}</p>
         </div>
       `;
 
@@ -168,7 +226,7 @@ const Map: React.FC<MapProps> = ({
     <div 
       ref={mapContainer} 
       style={{ width, height }} 
-      className="map-container rounded-lg shadow-lg"
+      className="absolute inset-0 z-0"
     />
   );
 };

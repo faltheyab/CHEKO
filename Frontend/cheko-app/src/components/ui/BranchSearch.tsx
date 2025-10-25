@@ -13,20 +13,36 @@ const BranchSearch: React.FC<BranchSearchProps> = ({ onSearch }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full mb-6">
-      <input
-        type="text"
-        placeholder="Search branches by name..."
-        className="flex-grow px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <button
-        type="submit"
-        className="px-6 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700"
-      >
-        Search
-      </button>
+    <form onSubmit={handleSubmit} className="w-full mb-6 relative z-10">
+      <div className='flex search-bar-container'>
+          <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="var(--search-icon)"
+              strokeWidth="2"
+              className="absolute mt-2 left-3 top-3 h-6 w-6 text-gray-400"
+              style={{ flexShrink: 0 }}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"
+              />
+            </svg>
+        <input
+          type="text"
+          placeholder="Search ..."
+          className="w-full search-bar"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <button
+          type="submit"
+          className="px-4 py-2 sreach-button">
+          Search
+        </button>
+      </div>
     </form>
   );
 };

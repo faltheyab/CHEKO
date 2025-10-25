@@ -11,7 +11,6 @@ import MenuItemModal from '@/src/components/ui/MenuItemModal';
 import Loader from '@/src/components/ui/Loader';
 import TopMenuBar from '@/src/components/ui/TopMenuBar';
 
-// Custom card component with counter
 const MenuItemCardWithCounter: React.FC<{
   item: MenuItem;
   onItemClick: (item: MenuItem) => void;

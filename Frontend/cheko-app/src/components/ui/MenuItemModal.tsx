@@ -61,10 +61,14 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, isOpen, onClose, on
         <div className="relative h-64 w-full">
           {item.imageUrl ? (
             <Image
-              src={item.imageUrl}
+              src={item.imageUrl} 
               alt={item.name}
               fill
               className="object-cover rounded-t-lg"
+              onError={(e) => {
+                e.currentTarget.onerror = null; // prevents infinite loop if fallback fails
+                e.currentTarget.src = "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg";
+              }}
             />
           ) : (
             <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center rounded-t-lg">
@@ -73,7 +77,7 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, isOpen, onClose, on
               </svg>
             </div>
           )}
-          
+
           {/* Close button */}
           <button
             onClick={onClose}

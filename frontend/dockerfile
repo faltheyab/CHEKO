@@ -2,18 +2,23 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
+# Accept backend base URL as build argument
+ARG BACKEND_URL=http://0.0.0.0:8080/api
+ENV BACKEND_URL=${BACKEND_URL}
+
 COPY cheko-app/package*.json ./
-RUN npm ci
+RUN npm ci || npm install
 
 COPY cheko-app/ .
+
+#  Replace localhost:8080 with desired URL in config.json
+RUN sed -i "s#http://localhost:8080/api#${BACKEND_URL}#g" public/config.json
+
 RUN npm run build
 
 # Stage 2: Run Next.js server
 FROM node:20-alpine AS runtime
 WORKDIR /app
-
-# Copy all files needed for runtime
 COPY --from=build /app ./
-
 EXPOSE 3000
 CMD ["npm", "start"]

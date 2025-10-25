@@ -39,60 +39,11 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public BranchResponse getBranchById(Long id) {
-        Branch branch = branchRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.create("Branch", "id", id));
-        return mapToResponse(branch);
-    }
-
-    @Override
     @Transactional
     public BranchResponse createBranch(BranchRequest branchRequest) {
         Branch branch = mapToEntity(branchRequest);
         Branch savedBranch = branchRepository.save(branch);
         return mapToResponse(savedBranch);
-    }
-
-    @Override
-    @Transactional
-    public BranchResponse updateBranch(Long id, BranchRequest branchRequest) {
-        Branch branch = branchRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.create("Branch", "id", id));
-        
-        updateBranchFromRequest(branch, branchRequest);
-        Branch updatedBranch = branchRepository.save(branch);
-        return mapToResponse(updatedBranch);
-    }
-
-    @Override
-    @Transactional
-    public void deleteBranch(Long id) {
-        if (!branchRepository.existsById(id)) {
-            throw ResourceNotFoundException.create("Branch", "id", id);
-        }
-        branchRepository.deleteById(id);
-    }
-
-    @Override
-    public List<BranchResponse> findNearbyBranches(Double latitude, Double longitude, double distance) {
-        Point location = geometryFactory.createPoint(new Coordinate(longitude, latitude));
-        return branchRepository.findNearbyBranches(location, distance).stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<BranchResponse> findActiveBranches() {
-        return branchRepository.findByIsActiveTrue().stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public BranchResponse findMainBranch() {
-        Branch branch = branchRepository.findByIsMainBranchTrue()
-                .orElseThrow(() -> new ResourceNotFoundException("Main branch not found"));
-        return mapToResponse(branch);
     }
 
     private BranchResponse mapToResponse(Branch branch) {

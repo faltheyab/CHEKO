@@ -13,11 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface BranchRepository extends JpaRepository<Branch, Long> {
-    
 
-    Optional<Branch> findByBranchName(String branchName);
-    List<Branch> findByCity(String city);
-    List<Branch> findByCountry(String country);
     List<Branch> findByIsActiveTrue();
     Optional<Branch> findByIsMainBranchTrue();
     @Query(value = "SELECT b.* FROM restaurant.branches b " +

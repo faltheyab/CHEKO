@@ -45,7 +45,7 @@ public class BranchController {
         List<BranchResponse> branches = branchService.getAllBranches();
         return ResponseEntity.ok(branches);
     }
-    
+
     @PostMapping
     @Operation(summary = "Create a new branch", description = "Creates a new branch and returns the created branch")
     @ApiResponses(value = {

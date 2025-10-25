@@ -1,10 +1,6 @@
 package com.faisal.cheko.controller;
 
-import com.faisal.cheko.dto.MenuItemResponse;
-import com.faisal.cheko.dto.MenuSectionRequest;
-import com.faisal.cheko.dto.MenuSectionResponse;
 import com.faisal.cheko.dto.MenuSectionWithCountResponse;
-import com.faisal.cheko.dto.PageResponse;
 import com.faisal.cheko.service.MenuItemService;
 import com.faisal.cheko.service.MenuSectionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,13 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,12 +23,10 @@ import java.util.List;
 public class MenuSectionController {
 
     private final MenuSectionService menuSectionService;
-    private final MenuItemService menuItemService;
 
     @Autowired
-    public MenuSectionController(MenuSectionService menuSectionService, MenuItemService menuItemService) {
+    public MenuSectionController(MenuSectionService menuSectionService) {
         this.menuSectionService = menuSectionService;
-        this.menuItemService = menuItemService;
     }
 
     @GetMapping("/branch/{branchId}/with-counts")

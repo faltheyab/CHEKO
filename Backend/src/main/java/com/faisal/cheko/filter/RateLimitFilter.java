@@ -1,6 +1,5 @@
 package com.faisal.cheko.filter;
 
-import com.faisal.cheko.exception.RateLimitExceededException;
 import com.faisal.cheko.service.RateLimiterService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

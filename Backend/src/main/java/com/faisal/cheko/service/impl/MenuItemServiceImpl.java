@@ -37,19 +37,6 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public List<MenuItemResponse> getAvailableMenuItemsByBranchId(Long branchId) {
-        return menuItemRepository.findAvailableByBranchId(branchId).stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-    
-    @Override
-    public Page<MenuItemResponse> getAllMenuItemsPaginated(Pageable pageable) {
-        return menuItemRepository.findAll(pageable)
-                .map(this::mapToResponse);
-    }
-    
-    @Override
     public Page<MenuItemResponse> getMenuItemsBySectionIdPaginated(Long sectionId, Pageable pageable) {
         if (!menuSectionRepository.existsById(sectionId)) {
             throw ResourceNotFoundException.create("MenuSection", "id", sectionId);

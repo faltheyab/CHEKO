@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface MenuItemService {
 
-    List<MenuItemResponse> getAvailableMenuItemsByBranchId(Long branchId);
-    Page<MenuItemResponse> getAllMenuItemsPaginated(Pageable pageable);
     Page<MenuItemResponse> getMenuItemsBySectionIdPaginated(Long sectionId, Pageable pageable);
     Page<MenuItemResponse> getMenuItemsByBranchIdPaginated(Long branchId, Pageable pageable);
     Page<MenuItemResponse> getAvailableMenuItemsByBranchIdPaginated(Long branchId, String nameQuery, Pageable pageable);

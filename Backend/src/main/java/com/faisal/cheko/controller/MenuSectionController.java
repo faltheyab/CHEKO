@@ -29,7 +29,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/menu-sections")
-@Tag(name = "Menu Section", description = "Menu section management APIs")
+@Tag(name = "Menu Section", description = "Menu section APIs")
 public class MenuSectionController {
 
     private final MenuSectionService menuSectionService;

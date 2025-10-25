@@ -37,50 +37,6 @@ public class MenuItemController {
         this.menuItemService = menuItemService;
     }
 
-    @GetMapping("/branch/{branchId}/available")
-    @Operation(summary = "Get available menu items by branch ID", description = "Returns a list of available menu items for a specific branch")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Successfully retrieved menu items",
-                    content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = MenuItemResponse.class)))
-    })
-    public ResponseEntity<List<MenuItemResponse>> getAvailableMenuItemsByBranchId(
-            @Parameter(description = "Branch ID", required = true)
-            @PathVariable Long branchId) {
-        List<MenuItemResponse> menuItems = menuItemService.getAvailableMenuItemsByBranchId(branchId);
-        return ResponseEntity.ok(menuItems);
-    }
-
-    @GetMapping("/paginated")
-    @Operation(summary = "Get all menu items with pagination", description = "Returns a paginated list of menu items")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Successfully retrieved menu items",
-                    content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = PageResponse.class))
-            )
-    })
-    public ResponseEntity<PageResponse<MenuItemResponse>> getAllMenuItemsPaginated(
-            @Parameter(description = "Page number (0-based)", example = "0")
-            @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Page size", example = "10")
-            @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "Sort field", example = "name")
-            @RequestParam(defaultValue = "name") String sort,
-            @Parameter(description = "Sort direction", example = "asc")
-            @RequestParam(defaultValue = "asc") String direction) {
-        
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort));
-        
-        Page<MenuItemResponse> menuItemsPage = menuItemService.getAllMenuItemsPaginated(pageable);
-        PageResponse<MenuItemResponse> response = PageResponse.from(menuItemsPage);
-        
-        return ResponseEntity.ok(response);
-    }
 
     @GetMapping("/section/{sectionId}/paginated")
     @Operation(summary = "Get menu items by section ID with pagination", description = "Returns a paginated list of menu items for a specific section")

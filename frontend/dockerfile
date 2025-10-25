@@ -8,8 +8,12 @@ RUN npm ci
 COPY cheko-app/ .
 RUN npm run build
 
-# Stage 2: Serve via Nginx
-FROM nginx:stable-alpine-slim AS runtime
-COPY --from=build /app/.next /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Stage 2: Run Next.js server
+FROM node:20-alpine AS runtime
+WORKDIR /app
+
+# Copy all files needed for runtime
+COPY --from=build /app ./
+
+EXPOSE 3000
+CMD ["npm", "start"]
